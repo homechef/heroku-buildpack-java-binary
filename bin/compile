@@ -28,12 +28,12 @@ install_java() {
   if [ ! -f "${jreTarball}" ] && [ ! -f "${javaExe}" ] ; then
     rm -rf "${jreDir}"
     mkdir -p "${jreDir}"
-    validate_jre_url ${jreUrl} ${jreVersion}
+    validate_jre_url ${jreUrl}
+    notice_inline "downloading $jreUrl"
     curl --retry 3 --silent --show-error --location ${jreUrl} --output ${jreTarball}
     tar pxzf ${jreTarball} -C "${jreDir}"
     rm ${jreTarball}
     install_cacerts ${jreDir}
-    echo "${jreVersion}" > "${jreDir}/version"
     if [ ! -f "${javaExe}" ]; then
       error_return "Unable to retrieve the JRE."
       return 1
