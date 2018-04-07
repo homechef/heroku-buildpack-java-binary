@@ -22,7 +22,7 @@ install_java() {
 
   local jreDir="${baseDir}"/.jre
   local jreTarball="${jreDir}"/jre.tar.gz
-  local javaExe="${jreDir}/bin/java"
+  local javaExe="${jreDir}/jdk-10/bin/java"
   mkdir -p "${jreDir}"
 
   if [ ! -f "${jreTarball}" ] && [ ! -f "${javaExe}" ] ; then
@@ -33,14 +33,15 @@ install_java() {
     curl --retry 3 --silent --show-error --location ${jreUrl} --output ${jreTarball}
     tar pxzf ${jreTarball} -C "${jreDir}"
     rm ${jreTarball}
-    notice "$(ls $jreDir)"
-    notice "$(ls $jreDir/bin)"
     install_cacerts ${jreDir}
     if [ ! -f "${javaExe}" ]; then
       error_return "Unable to retrieve the JRE."
       return 1
     fi
   fi
+
+  export JAVA_HOME=${jdkDir}
+  export PATH="${jdkDir}/bin:${PATH}"
 }
 
 install_cacerts() {
