@@ -11,10 +11,12 @@ ENV_DIR=$3
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 
 export "JRE_URL=$(cat $ENV_DIR/JRE_URL)"
+export "JDK_VERSION=$(cat $ENV_DIR/JDK_VERSION)"
 
 install_java() {
   local baseDir=$1
   local jreUrl=$2
+  local jdkVersion=$3
   if [ ! -d "${baseDir}" ]; then
     error_return "Invalid directory to install java."
     return 1
@@ -22,7 +24,7 @@ install_java() {
 
   local jreDir="${baseDir}"/.jre
   local jreTarball="${jreDir}"/jre.tar.gz
-  local javaExe="${jreDir}/jdk-10/bin/java"
+  local javaExe="${jreDir}/${jdkVersion}/bin/java"
   mkdir -p "${jreDir}"
 
   if [ ! -f "${jreTarball}" ] && [ ! -f "${javaExe}" ] ; then
@@ -158,4 +160,4 @@ copy_directories() {
 }
 
 
-install_java ${BUILD_DIR} ${JRE_URL}
+install_java ${BUILD_DIR} ${JRE_URL} ${JDK_VERSION}
